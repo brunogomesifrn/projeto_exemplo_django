@@ -3,6 +3,9 @@ from .models import Area, Publico, Curso
 from .forms import AreaForm, PublicoForm, CursoForm
 
 
+def index(request):
+    return render(request, 'index.html')
+
 '''
 
 ============= ÁREAS =============

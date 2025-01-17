@@ -1,10 +1,12 @@
 from django.urls import path
+from .views import index
 from .views import areas, area_cadastrar, area_editar, area_remover
 from .views import publicos, publico_cadastrar, publico_editar, publico_remover
 from .views import cursos, curso_cadastrar, curso_editar, curso_remover
 
 urlpatterns = [
 
+    path('', index, name='index'),
 
     # ==== ÁREA ====
     path('areas/', areas, name='areas'),
