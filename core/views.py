@@ -1,7 +1,41 @@
 from django.shortcuts import render, redirect
 from .models import Area, Publico, Curso
 from .forms import AreaForm, PublicoForm, CursoForm
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import AreaSerializer
 
+@api_view(['GET'])
+def areaAPIlistar(request):
+    areas = Area.objects.all()
+    areas_serializer = AreaSerializer(areas, many=True)
+    return Response(areas_serializer.data)
+
+@api_view(['PUT'])
+def areaAPIadicionar(request):
+    area = AreaSerializer(data=request.data)
+    if area.is_valid():
+        area.save()
+        return Response(area.data, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def areaAPIatualizar(request, id):
+    area_bd = Area.objects.get(id=id)
+    area = AreaSerializer(data=request.data,
+                                 instance=area_bd)
+    if area.is_valid():
+        area.save()
+        return Response(area.data, status=status.HTTP_202_ACCEPTED)
+
+@api_view(['DELETE'])
+def areaAPIremover(request, id):
+    area_bd = Area.objects.get(id=id)
+    if area_bd:
+        area_bd.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 def index(request):
     return render(request, 'index.html')
